@@ -4,15 +4,25 @@
     <meta charset="UTF-8">
     <title>Video call over CCN </title>
     <style rel="stylesheet" href="../css/maincss.css"></style>
+    <script src="js/websocketutils.js"></script>
+    <script src="js/ccnapi.js"></script>
     <script src="js/main.js"></script>
+
 </head>
 <body onload="init()">
 <video id="localStream"></video>
 <video id="remoteStream"></video>
-<p><textarea>/robert</textarea></p>
+<p>From:<textarea id="name">/robert</textarea></p>
+<p>To:<textarea id="calledName">/test</textarea></p>
+<p><textarea id="ipAddress">127.0.0.1</textarea></p>
+<p><textarea id="portNumber">1337</textarea></p>
 <button id="mediaBtn">GetMedia</button>
 <button id="regBtn">Register</button>
 <button id="offerBtn">CreateOffer</button>
 <button id="remoteBtn">StartRemote</button>
+<button id="wsConnection">WS connect</button>
+<button id="wsConnectionClose">WS close</button>
+<button id="makeCall">Make call</button>
+
 </body>
 </html>

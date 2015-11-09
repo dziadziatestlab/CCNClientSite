@@ -7,6 +7,10 @@ var localVideoElement,remoteVideoElement;
 var peerConnection;
 var remotePeerConnection=new mozRTCPeerConnection();
 var mediaObject={};
+var ipAddress,portNumber,wsButton,wsCloseButton;
+var registerButton;
+var makeCallButton;
+
 
 var pc_config = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
 
@@ -29,6 +33,16 @@ var init=function(){
     offerBtn.onclick=createOffer;
     remoteBtn=document.getElementById('remoteBtn');
     remoteBtn.onclick=startRemoteVideo;
+    wsButton=document.getElementById("wsConnection");
+    wsCloseButton=document.getElementById("wsConnectionClose");
+    wsButton.onclick=establishWSConnection;
+    wsCloseButton.onclick=wsCloseConnection;
+    registerButton=document.getElementById("regBtn");
+    console.log(registerButton);
+    registerButton.onclick=CCNAPI.nameRegister;
+    makeCallButton=document.getElementById("makeCall");
+    makeCallButton.onclick=CCNAPI.makeCall;
+
 }
 
 
@@ -136,4 +150,21 @@ var gotRemoteIceCandidate=function(can){
         peerConnection.addIceCandidate(candidate);
         console.log(peerConnection);
     }
+}
+
+var establishWSConnection=function(){
+    console.log("establishWSConnection called");
+    ipAddress=document.getElementById("ipAddress").value;
+    portNumber=document.getElementById("portNumber").value;
+    console.log("ipAddress of remote Node:"+ipAddress+":"+portNumber);
+    window.WSConnection=WS.connect(ipAddress,portNumber);
+}
+var wsCloseConnection=function(){
+    console.log("wsCloseConnection called !");
+    WSConnection.close();
+}
+
+var nameRegister=function(){
+    console.log('Name register !!!');
+    CCNAPI.nameRegister();
 }
