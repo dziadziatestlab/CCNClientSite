@@ -23,7 +23,7 @@ CCNAPI.nameRegister=function(name){
 
 CCNAPI.makeCall=function(){
     var data={
-        type:'call',
+        type:'CALL',
         From:document.getElementById("name").value,
         To:document.getElementById("calledName").value
     };
