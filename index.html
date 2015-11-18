@@ -15,14 +15,15 @@
 <p>From:<textarea id="name">/robert</textarea></p>
 <p>To:<textarea id="calledName">/test</textarea></p>
 <p><textarea id="ipAddress">127.0.0.1</textarea></p>
-<p><textarea id="portNumber">1337</textarea></p>
+<p><textarea id="portNumber">8000</textarea></p>
 <button id="mediaBtn">GetMedia</button>
-<button id="regBtn">Register</button>
+<button id="regBtn" onclick="CCNAPI.nameRegister">Register</button>
 <button id="offerBtn">CreateOffer</button>
 <button id="remoteBtn">StartRemote</button>
 <button id="wsConnection">WS connect</button>
 <button id="wsConnectionClose">WS close</button>
 <button id="makeCall">Make call</button>
+<button id="testButton" onclick="connectionTest()">Test Connection</button>
 
 </body>
 </html>

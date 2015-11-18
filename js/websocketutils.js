@@ -16,6 +16,9 @@ WS.connect=function(ipAddress,port){
 
     };
     connection.onmessage=function(message){
+        console.log('onmessage called');
+        var dane=JSON.parse(message.data);
+        console.log(JSON.stringify(dane));
 
     };
 

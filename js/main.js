@@ -168,3 +168,14 @@ var nameRegister=function(){
     console.log('Name register !!!');
     CCNAPI.nameRegister();
 }
+
+var connectionTest=function(){
+    var data={
+        type:"TEST",
+        userId:name
+    };
+    if(typeof(name)!="string")     data.userId=document.getElementById("name").value;
+    console.log('data to be send: '+JSON.stringify(data));
+    WSConnection.send(JSON.stringify(data));
+
+}
