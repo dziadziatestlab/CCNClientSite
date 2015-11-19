@@ -12,7 +12,8 @@ CCNAPI.nameRegister=function(name){
 
     var data={
         type:"REGISTER",
-        userId:name
+        userId:name,
+        SDP:mediaObject.localDescription.sdp
     };
     if(typeof(name)!="string")     data.userId=document.getElementById("name").value;
     console.log('data to be send: '+JSON.stringify(data));
