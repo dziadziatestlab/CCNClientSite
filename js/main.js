@@ -123,6 +123,7 @@ var doAnswer=function(){
     remotePeerConnection.createAnswer(onCreateAnswerSuccess,onError);
 }
 
+
 remotePeerConnection.onaddstream=function(e){
     console.log('PC2 onaddstream called.');
     remoteVideoElement.srcObject= e.stream;
