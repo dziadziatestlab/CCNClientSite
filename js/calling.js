@@ -19,7 +19,8 @@ navigator.getUserMedia=navigator.mozGetUserMedia;
 
 function init(){
     localVideoElement=document.getElementById("localStream");
-    peerConnection==new mozRTCPeerConnection();
+    peerConnection=new mozRTCPeerConnection();
+    remoteVideoElement=document.getElementsByName("remoteStream");
 }
 
 var getMedia=function(){
@@ -36,6 +37,7 @@ var gotStream=function(stream){
 
 var onError=function(e){
     console.log('# onError called');
+    console.log(e.name);
 }
 
 
@@ -85,6 +87,18 @@ var establishWSConnection=function(){
 }
 
 
+function addIceCandidate(can){
+    console.log('# addIceCandidate called');
+
+    //var remotePeerConnection=new RTCPeerConnection();
+    if(can.candidate) {
+        var candidate = new mozRTCIceCandidate(can.candidate);
+        //console.log('candidate on remote site: '+JSON.stringify(candidate));
+        remotePeerConnection.addIceCandidate(candidate);
+        //console.log(remotePeerConnection);
+    }
+}
+
 var gotRemoteSignalling=function(data){
     console.log("gotRemoteSignalling called ");
     console.log("type of localDescription: "+typeof(mediaObject.localDescription));
@@ -96,8 +110,41 @@ var gotRemoteSignalling=function(data){
         startRemote(data.ICE[can]);
     }
     */
-    var session=new mozRTCSessionDescription(data.SDP);
-    console.log('new RTCP SDP created ');
+
+    /*
+    if(data.SDP){
+        var session=new mozRTCSessionDescription(data.SDP);
+        console.log('new RTCP SDP created ');
+        peerConnection.setRemoteDescription(session,function(){
+            console.log('peerConnection setRemoteDescription success');
+        },onError);
+    }
+    */
+    if(data.SDP){
+        var session=new mozRTCSessionDescription(data.SDP);
+        console.log('new RTCP SDP created ');
+        remotePeerConnection=new mozRTCPeerConnection();
+        remotePeerConnection.onaddstream=function(e){
+            console.log("remotePeerConnection onaddstream called");
+            remoteVideoElement.srcObject= e.stream;
+
+
+        }
+        remotePeerConnection.setRemoteDescription(session,function(){
+            console.log('remotePeerConnection setRemoteDescription success');
+        },onError);
+
+        remotePeerConnection.createAnswer(onCreateAnswerSuccess,onError);
+
+    }
+
+    if(data.ICE){
+        for(can in data.ICE){
+            addIceCandidate(data.ICE[can]);
+        }
+    }
+
+
     //remotePeerConnection=new mozRTCPeerConnection();
     //peerConnection.setRemoteDescription(session,doAnswer,onError);
     //console.log(remotePeerConnection);
@@ -117,10 +164,18 @@ var gotRemoteSignalling=function(data){
      */
 
 
-    peerConnection.onaddstream=function(e){
-        console.log("onaddsteam called !!!!!!!!!!!");
-    }
+
 }
+
+function onCreateAnswerSuccess(desc){
+    console.log("onCreateAnswerSuccess called");
+    remotePeerConnection.setLocalDescription(desc,function(){
+        console.log("remotePeerConnection setLocalDescription success !!!")
+    },onError);
+}
+
+
+
 
 /*
 var doAnswer=function(){
