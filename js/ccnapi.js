@@ -35,8 +35,8 @@ CCNAPI.makeCall=function(){
         From:document.getElementById("name").value,
         To:document.getElementById("calledName").value
     };
-
     WSConnection.send(JSON.stringify(data));
+
 
 }
 
