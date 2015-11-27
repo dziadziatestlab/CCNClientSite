@@ -13,15 +13,23 @@ CCNAPI.nameRegister=function(name){
     var data={
         type:"REGISTER",
         userId:name,
-        SDP:mediaObject.localDescription.sdp
+        SDP:mediaObject.localDescription,
+        ICE:mediaObject.iceLocal
     };
     if(typeof(name)!="string")     data.userId=document.getElementById("name").value;
-    console.log('data to be send: '+JSON.stringify(data));
-    WSConnection.send(JSON.stringify(data));
+    if(isANSWERReady) data.ANSWER=mediaObject.ANSWER;
+    if(isICELoaded && isSDPLoaded){
+        console.log('data to be send: '+JSON.stringify(data));
+        WSConnection.send(JSON.stringify(data));
+    }else console.log('Waiting for all information');
+
+
+
 
 }
 
 CCNAPI.makeCall=function(){
+    console.log("API makeCall");
     var data={
         type:'CALL',
         From:document.getElementById("name").value,
@@ -30,4 +38,15 @@ CCNAPI.makeCall=function(){
 
     WSConnection.send(JSON.stringify(data));
 
+}
+
+CCNAPI.getRemoteInfo=function(){
+    console.log("API getRemoteInfo");
+    var data={
+        type:'GETINFO',
+        From:document.getElementById("name").value,
+        To:document.getElementById("calledName").value
+    }
+
+    WSConnection.send(JSON.stringify(data));
 }

@@ -19,7 +19,25 @@ WS.connect=function(ipAddress,port){
         console.log('onmessage called');
         //var dane=JSON.parse(message.data);
         //console.log(JSON.stringify(dane));
-        console.log(message.data);
+        var data="";
+
+        try{
+            data=JSON.parse(message.data);
+
+        }
+        catch(e){
+            console.log("No possibility to catch")
+        }
+
+        if(typeof(data)=="object"){
+            console.log("data is object");
+            console.log(JSON.stringify(data));
+            gotRemoteSignalling(data);
+        }else{
+            console.log("data no object");
+            console.log(message.data);
+        };
+
     };
 
     return connection;
