@@ -83,3 +83,39 @@ var establishWSConnection=function(){
     console.log("ipAddress of remote Node:"+ipAddress+":"+portNumber);
     window.WSConnection=WS.connect(ipAddress,portNumber);
 }
+
+var createAnswerCall=function(){
+    console.log("createAnswerCall called");
+    CCNAPI.makeCall();
+
+}
+
+var gotRemoteSignalling=function(data){
+    console.log("gotRemoteSignalling called");
+    if(data.SDP){
+        var session=new mozRTCSessionDescription(data.SDP);
+        console.log('new RTCP SDP created ');
+        //remotePeerConnection=new mozRTCPeerConnection();
+        /*
+        remotePeerConnection.onaddstream=function(e){
+            console.log("remotePeerConnection onaddstream called");
+            remoteVideoElement.srcObject= e.stream;
+
+
+        }
+        */
+        peerConnection.setRemoteDescription(session,function(){
+            console.log('peerConnection setRemoteDescription success');
+            peerConnection.createAnswer(onCreateAnswerSuccess,onError);
+
+        },onError);
+
+    }
+}
+
+var onCreateAnswerSuccess=function(desc){
+    console.log("onCreateAnswerSuccess called");
+    peerConnection.setLocalDescription(desc,function(){
+        console.log("setLocalDescription after onAswer called");
+    },onError);
+}
