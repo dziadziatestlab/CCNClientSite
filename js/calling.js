@@ -172,6 +172,9 @@ function onCreateAnswerSuccess(desc){
     remotePeerConnection.setLocalDescription(desc,function(){
         console.log("remotePeerConnection setLocalDescription success !!!")
     },onError);
+
+    remoteVideoElement.play();
+
 }
 
 
