@@ -120,6 +120,8 @@ var gotRemoteSignalling=function(data){
         },onError);
     }
     */
+
+    /*
     if(data.SDP){
         var session=new mozRTCSessionDescription(data.SDP);
         console.log('new RTCP SDP created ');
@@ -137,12 +139,16 @@ var gotRemoteSignalling=function(data){
         remotePeerConnection.createAnswer(onCreateAnswerSuccess,onError);
 
     }
+    */
 
+    /*
     if(data.ICE){
         for(can in data.ICE){
             addIceCandidate(data.ICE[can]);
         }
     }
+
+    */
 
 
     //remotePeerConnection=new mozRTCPeerConnection();
