@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<style >
+    #localStream{
+        height: 100px;
+    }
+</style>
+<body>
+<video id="localStream"></video>
+<video id="remoteStream"></video>
+<p></p>
+<button id="mediaBtn" onclick="getMedia()">GetMedia</button>
+<button id="mediaBtn2" onclick="makeCall()">MakeCall</button>
+<button id="mediaBtn3" onclick="addIceCandidate()">AddIceCandidate</button>
+<button id="mediaBtn4" onclick="createAnswer()">CreateAnswer</button>
+<script>
+    var localVideoElement=document.getElementById("localStream");
+    var remoteVideoElement=document.getElementById("remoteStream");
+    navigator.getUserMedia=navigator.mozGetUserMedia;
+    var peerConnection=new mozRTCPeerConnection();
+    peerConnection.onaddstream=function(){console.log("onaddstream called")};
+    peerConnection.onicecandidate=function(candidates){
+        console.log("onicecandidate called ");
+        if(candidates.candidate) iceCandidates.push(candidates.candidate);
+
+    };
+
+    var iceCandidates=[];
+    var mediaObject={};
+
+
+    function getMedia(){
+        console.log('# mediaBtn clicked.');
+        navigator.getUserMedia(constraints,gotStream,onError);
+    }
+
+
+    var gotStream=function(stream){
+        console.log("gotStream called");
+        window.stream=stream;
+        localVideoElement.src=window.URL.createObjectURL(stream);
+        localVideoElement.play();
+        createOffer();
+    }
+
+    var onError=function(e){
+        console.log("onError called.");
+        console.log(e.message);
+    }
+
+    var constraints={
+        video:true,
+        audio: false
+    }
+
+    var createOffer=function(){
+        console.log("createOffer called");
+        if(window.stream){
+            peerConnection.addStream(window.stream);
+            peerConnection.createOffer(gotDescription,onError,onError);
+        }
+
+
+
+    }
+
+    var gotDescription=function(desc){
+        console.log('gotDescription called');
+        peerConnection.setLocalDescription(desc);
+        mediaObject.DESC=desc;
+    }
+
+
+    // ##############################################################################
+
+    var makeCall=function(){
+        var remotePeerConnection=new mozRTCPeerConnection();
+        remotePeerConnection.onaddstream=function(e){
+            console.log("onaddstream function called on remotePeerConnection");
+            remoteVideoElement.srcObject= e.stream;
+            remoteVideoElement.play();
+        };
+        window.remotePeerConnection=remotePeerConnection;
+        console.log("makeCall called");
+        if(mediaObject.DESC){
+            var session= new mozRTCSessionDescription(mediaObject.DESC);
+            remotePeerConnection.setRemoteDescription(session,onRemoteDescAdded,onError);
+        }
+    }
+
+    var onRemoteDescAdded=function(){
+        console.log("onRemoteDescAdded called");
+    }
+
+    var addIceCandidate=function(){
+        console.log("addIceCandidate to remotePeerConnection called");
+        for(can in iceCandidates){
+            remotePeerConnection.addIceCandidate(iceCandidates[can]);
+        }
+
+    }
+
+    var createAnswer=function(){
+        console.log("createAnswer called");
+        remotePeerConnection.createAnswer(onCreateAnswerSuccess,onError,onError);
+    }
+
+    var onCreateAnswerSuccess=function(desc){
+        console.log("onCreateAnswerSuccess called");
+        remotePeerConnection.setLocalDescription(desc,function(){
+            console.log("remotePeerConnection setLocalDescription success !!!");
+        },onError);
+    }
+
+</script>
+
+
+</body>
+</html>

@@ -21,7 +21,7 @@ navigator.getUserMedia=navigator.mozGetUserMedia;
 function init(){
     localVideoElement=document.getElementById("localStream");
     remoteVideoElement=document.getElementById("remoteStream");
-    peerConnection==new mozRTCPeerConnection();
+    peerConnection=new mozRTCPeerConnection();
 }
 
 var getMedia=function(){
@@ -66,7 +66,7 @@ var gotIceCandidate=function(candidates){
 var iceCandidates=function(candidates){
     console.log("iceCandidate called ");
     if(candidates.candidate){
-        mediaObject.iceLocal.push(candidates);
+        mediaObject.iceLocal.push(candidates.candidate);
     }
 }
 

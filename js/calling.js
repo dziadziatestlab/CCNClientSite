@@ -65,7 +65,7 @@ var gotIceCandidate=function(candidates){
 var iceCandidates=function(candidates){
     console.log("iceCandidate called ");
     if(candidates.candidate){
-        mediaObject.iceLocal.push(candidates);
+        mediaObject.iceLocal.push(candidates.candidate);
     }
 }
 
@@ -91,7 +91,7 @@ function addIceCandidate(can){
     console.log('# addIceCandidate called');
 
     //var remotePeerConnection=new RTCPeerConnection();
-    if(can.candidate) {
+    if(candidate) {
         var candidate = new mozRTCIceCandidate(can.candidate);
         //console.log('candidate on remote site: '+JSON.stringify(candidate));
         remotePeerConnection.addIceCandidate(candidate);
@@ -141,14 +141,14 @@ var gotRemoteSignalling=function(data){
     }
     */
 
-    /*
+
     if(data.ICE){
         for(can in data.ICE){
             addIceCandidate(data.ICE[can]);
         }
     }
 
-    */
+
 
 
     //remotePeerConnection=new mozRTCPeerConnection();
