@@ -4,6 +4,7 @@
 var localVideoElement;
 var remoteVideoElement;
 var peerConnection;
+var remotePeerConnection;
 var isICELoaded=false;
 var isSDPLoaded=false;
 var isANSWERReady=false;
@@ -11,7 +12,7 @@ var isANSWERReady=false;
 var mediaObject={};
 mediaObject.iceLocal=[]
 
-
+var pc_config = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
 
 var constraints={audio:false,video:true};
 window.RTCPeerConnection=mozRTCPeerConnection;
@@ -21,7 +22,7 @@ navigator.getUserMedia=navigator.mozGetUserMedia;
 function init(){
     localVideoElement=document.getElementById("localStream");
     remoteVideoElement=document.getElementById("remoteStream");
-    peerConnection=new mozRTCPeerConnection();
+    peerConnection=new mozRTCPeerConnection(pc_config);
 }
 
 var getMedia=function(){
@@ -98,13 +99,17 @@ var gotRemoteSignalling=function(data){
     if(data.SDP){
         var session=new mozRTCSessionDescription(data.SDP);
         console.log('new RTCP SDP created ');
-        remotePeerConnection=new mozRTCPeerConnection();
+        remotePeerConnection=new mozRTCPeerConnection(pc_config);
 
         remotePeerConnection.onaddstream=function(e){
             console.log("remotePeerConnection onaddstream called");
             remoteVideoElement.srcObject= e.stream;
+            remoteVideoElement.play();
+        }
 
-
+        for(can in data.ICE){
+            console.log("ICE data: \n"+JSON.stringify(data.ICE[can]));
+            startRemote(data.ICE[can]);
         }
 
         remotePeerConnection.setRemoteDescription(session,function(){
@@ -121,10 +126,7 @@ var gotRemoteSignalling=function(data){
         },onError);
         */
 
-        for(can in data.ICE){
-            console.log("ICE data: \n"+JSON.stringify(data.ICE[can]));
-            startRemote(data.ICE[can]);
-        }
+
     }
 
 
@@ -146,10 +148,12 @@ var startRemote=function(can){
     console.log('# start remote called');
 
     //var remotePeerConnection=new RTCPeerConnection();
-    if(can.candidate) {
-        var candidate = new mozRTCIceCandidate(can.candidate);
+    if(can) {
+        console.log("before setting candidate interface");
+        var candidate = new mozRTCIceCandidate(can);
+        console.log("after setting candidate interface");
         console.log('candidate on remote site: '+JSON.stringify(candidate));
         remotePeerConnection.addIceCandidate(candidate);
-        console.log(remotePeerConnection);
+        //console.log(remotePeerConnection);
     }
 }

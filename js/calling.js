@@ -11,6 +11,7 @@ var mediaObject={};
 mediaObject.iceLocal=[]
 
 
+var pc_config = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
 
 var constraints={audio:false,video:true};
 window.RTCPeerConnection=mozRTCPeerConnection;
@@ -19,8 +20,8 @@ navigator.getUserMedia=navigator.mozGetUserMedia;
 
 function init(){
     localVideoElement=document.getElementById("localStream");
-    peerConnection=new mozRTCPeerConnection();
-    remoteVideoElement=document.getElementsByName("remoteStream");
+    //peerConnection=new mozRTCPeerConnection();
+    //remoteVideoElement=document.getElementsByName("remoteStream");
 }
 
 var getMedia=function(){
@@ -44,7 +45,7 @@ var onError=function(e){
 
 var createOffer=function(){
     console.log('# createOffer called');
-    peerConnection=new RTCPeerConnection();
+    peerConnection=new RTCPeerConnection(pc_config);
     peerConnection.onaddstream=function(){console.log('local onaddstream called !')};
     if(window.stream){
         peerConnection.addStream(stream);
@@ -87,15 +88,15 @@ var establishWSConnection=function(){
 }
 
 
-function addIceCandidate(can){
+function addIceCandidate(candidate){
     console.log('# addIceCandidate called');
 
     //var remotePeerConnection=new RTCPeerConnection();
     if(candidate) {
-        var candidate = new mozRTCIceCandidate(can.candidate);
-        //console.log('candidate on remote site: '+JSON.stringify(candidate));
-        remotePeerConnection.addIceCandidate(candidate);
-        //console.log(remotePeerConnection);
+        var candidate = new mozRTCIceCandidate(candidate);
+        console.log('candidate on local site: '+JSON.stringify(candidate));
+        peerConnection.addIceCandidate(candidate);
+        console.log(remotePeerConnection);
     }
 }
 
@@ -158,7 +159,8 @@ var gotRemoteSignalling=function(data){
     if(data.ANSWER){
         console.log("ANSWER RECEIVED !!!!");
         console.log(JSON.stringify(data.ANSWER));
-        peerConnection.setRemoteDescription(data.ANSWER,
+        var session= new mozRTCSessionDescription(data.ANSWER);
+        peerConnection.setRemoteDescription(session,
             function(){
                 console.log('peerConnection setRemoteDescription success');
             },onError);
