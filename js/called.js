@@ -12,7 +12,7 @@ var isANSWERReady=false;
 var mediaObject={};
 mediaObject.iceLocal=[]
 
-var pc_config = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
+//var pc_config = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
 
 var constraints={audio:false,video:true};
 window.RTCPeerConnection=mozRTCPeerConnection;
@@ -22,7 +22,7 @@ navigator.getUserMedia=navigator.mozGetUserMedia;
 function init(){
     localVideoElement=document.getElementById("localStream");
     remoteVideoElement=document.getElementById("remoteStream");
-    peerConnection=new mozRTCPeerConnection(pc_config);
+    peerConnection=new mozRTCPeerConnection();
 }
 
 var getMedia=function(){
@@ -96,10 +96,14 @@ var createAnswerCall=function(){
 
 var gotRemoteSignalling=function(data){
     console.log("gotRemoteSignalling called");
+    window.remoteData=data;
     if(data.SDP){
         var session=new mozRTCSessionDescription(data.SDP);
         console.log('new RTCP SDP created ');
-        remotePeerConnection=new mozRTCPeerConnection(pc_config);
+        remotePeerConnection=new mozRTCPeerConnection();
+        remotePeerConnection.onicecandidate=function(can){
+            console.log("remotePeerConnection onicecandidate !!!");
+        }
 
         remotePeerConnection.onaddstream=function(e){
             console.log("remotePeerConnection onaddstream called");
@@ -107,15 +111,19 @@ var gotRemoteSignalling=function(data){
             remoteVideoElement.play();
         }
 
+        remotePeerConnection.setRemoteDescription(session,function(){
+            console.log('remotePeerConnection setRemoteDescription success');
+            remotePeerConnection.createAnswer(onCreateAnswerSuccess,onError);
+        },onError);
+
+
+
         for(can in data.ICE){
             console.log("ICE data: \n"+JSON.stringify(data.ICE[can]));
             startRemote(data.ICE[can]);
         }
 
-        remotePeerConnection.setRemoteDescription(session,function(){
-            console.log('remotePeerConnection setRemoteDescription success');
-            remotePeerConnection.createAnswer(onCreateAnswerSuccess,onError);
-        },onError);
+
 
 
         /*
@@ -135,13 +143,16 @@ var gotRemoteSignalling=function(data){
 var onCreateAnswerSuccess=function(desc){
     console.log("onCreateAnswerSuccess called");
     console.log(desc);
+    //window.answerDesc=desc;
 
     remotePeerConnection.setLocalDescription(desc,function(){
         console.log("remotePeerConnection setLocalDescription after onAswer called");
     },onError);
+
     mediaObject.ANSWER=desc;
     isANSWERReady=true;
     CCNAPI.nameRegister();
+
 }
 
 var startRemote=function(can){

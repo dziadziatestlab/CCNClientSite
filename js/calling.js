@@ -9,9 +9,9 @@ var isANSWERReady=false;
 var remotePeerConnection;
 var mediaObject={};
 mediaObject.iceLocal=[]
+var testcan=[];
 
-
-var pc_config = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
+//var pc_config = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
 
 var constraints={audio:false,video:true};
 window.RTCPeerConnection=mozRTCPeerConnection;
@@ -45,7 +45,7 @@ var onError=function(e){
 
 var createOffer=function(){
     console.log('# createOffer called');
-    peerConnection=new RTCPeerConnection(pc_config);
+    peerConnection=new RTCPeerConnection();
     peerConnection.onaddstream=function(){console.log('local onaddstream called !')};
     if(window.stream){
         peerConnection.addStream(stream);
@@ -58,6 +58,7 @@ var createOffer=function(){
 
 var gotIceCandidate=function(candidates){
     console.log('gotIceCandidate called');
+    testcan.push(candidates);
     console.log(JSON.stringify(candidates.candidate));
     isICELoaded=true;
     iceCandidates(candidates);
