@@ -22,7 +22,7 @@ navigator.getUserMedia=navigator.mozGetUserMedia;
 function init(){
     localVideoElement=document.getElementById("localStream");
     remoteVideoElement=document.getElementById("remoteStream");
-    peerConnection=new mozRTCPeerConnection();
+    //peerConnection=new mozRTCPeerConnection();
 }
 
 var getMedia=function(){
@@ -100,6 +100,8 @@ var gotRemoteSignalling=function(data){
     if(data.SDP){
         var session=new mozRTCSessionDescription(data.SDP);
         console.log('new RTCP SDP created ');
+
+        /*
         remotePeerConnection=new mozRTCPeerConnection();
         remotePeerConnection.onicecandidate=function(can){
             console.log("remotePeerConnection onicecandidate !!!");
@@ -115,7 +117,12 @@ var gotRemoteSignalling=function(data){
             console.log('remotePeerConnection setRemoteDescription success');
             remotePeerConnection.createAnswer(onCreateAnswerSuccess,onError);
         },onError);
+        */
 
+        peerConnection.setRemoteDescription(session,function(){
+            console.log("peerConnection setRemoteDescription success");
+            peerConnection.createAnswer(onCreateAnswerSuccess,onError);
+        },onError);
 
 
         for(can in data.ICE){
@@ -145,9 +152,12 @@ var onCreateAnswerSuccess=function(desc){
     console.log(desc);
     //window.answerDesc=desc;
 
+    /*
     remotePeerConnection.setLocalDescription(desc,function(){
         console.log("remotePeerConnection setLocalDescription after onAswer called");
     },onError);
+
+    */
 
     mediaObject.ANSWER=desc;
     isANSWERReady=true;
@@ -164,7 +174,8 @@ var startRemote=function(can){
         var candidate = new mozRTCIceCandidate(can);
         console.log("after setting candidate interface");
         console.log('candidate on remote site: '+JSON.stringify(candidate));
-        remotePeerConnection.addIceCandidate(candidate);
+        //remotePeerConnection.addIceCandidate(candidate);
         //console.log(remotePeerConnection);
+        peerConnection.addIceCandidate(candidate);
     }
 }

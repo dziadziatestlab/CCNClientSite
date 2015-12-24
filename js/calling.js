@@ -6,7 +6,7 @@ var peerConnection;
 var isICELoaded=false;
 var isSDPLoaded=false;
 var isANSWERReady=false;
-var remotePeerConnection;
+//var remotePeerConnection;
 var mediaObject={};
 mediaObject.iceLocal=[]
 var testcan=[];
@@ -97,7 +97,7 @@ function addIceCandidate(candidate){
         var candidate = new mozRTCIceCandidate(candidate);
         console.log('candidate on local site: '+JSON.stringify(candidate));
         peerConnection.addIceCandidate(candidate);
-        console.log(remotePeerConnection);
+        //console.log(remotePeerConnection);
     }
 }
 
@@ -144,6 +144,16 @@ var gotRemoteSignalling=function(data){
     */
 
 
+    if(data.ANSWER){
+        console.log("ANSWER RECEIVED !!!!");
+        console.log(JSON.stringify(data.ANSWER));
+        var session= new mozRTCSessionDescription(data.ANSWER);
+        peerConnection.setRemoteDescription(session,
+            function(){
+                console.log('peerConnection setRemoteDescription success');
+            },onError);
+    }
+
     if(data.ICE){
         for(can in data.ICE){
             addIceCandidate(data.ICE[can]);
@@ -157,15 +167,6 @@ var gotRemoteSignalling=function(data){
     //peerConnection.setRemoteDescription(session,doAnswer,onError);
     //console.log(remotePeerConnection);
 
-    if(data.ANSWER){
-        console.log("ANSWER RECEIVED !!!!");
-        console.log(JSON.stringify(data.ANSWER));
-        var session= new mozRTCSessionDescription(data.ANSWER);
-        peerConnection.setRemoteDescription(session,
-            function(){
-                console.log('peerConnection setRemoteDescription success');
-            },onError);
-    }
     /*
      remotePeerConnection.createAnswer(function(description2){
      console.log('got description2 :'+description2);
