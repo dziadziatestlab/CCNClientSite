@@ -47,11 +47,18 @@ var onError=function(e){
 var createOffer=function(){
     console.log('# createOffer called');
     peerConnection=new RTCPeerConnection();
-    peerConnection.onaddstream=function(){console.log('local onaddstream called !')};
+    peerConnection.onaddstream=function(e){
+        console.log('local onaddstream called !!!!!!!!!');
+        remoteVideoElement.src=window.URL.createObjectURL(e.stream);
+        remoteVideoElement.play();
+    };
     if(window.stream){
         peerConnection.addStream(stream);
         peerConnection.onicecandidate=gotIceCandidate;
-        peerConnection.createOffer(gotDescription,onError,onError);
+        isICELoaded=true;
+        isSDPLoaded=true;
+        mediaObject.localDescription="";
+        //peerConnection.createOffer(gotDescription,onError,onError);
     }
     else console.log("### stream not obtained !!!");
 
@@ -68,6 +75,7 @@ var iceCandidates=function(candidates){
     console.log("iceCandidate called ");
     if(candidates.candidate){
         mediaObject.iceLocal.push(candidates.candidate);
+        CCNAPI.nameRegister();
     }
 }
 
@@ -75,7 +83,7 @@ var gotDescription=function(description){
     console.log('# gotDescription called');
     console.log(description.sdp);
     mediaObject.localDescription=description;
-    peerConnection.setLocalDescription(description,function(){console.log('setLocalDescription finished.');},onError    );
+    //peerConnection.setLocalDescription(description,function(){console.log('setLocalDescription finished.');},onError    );
     isSDPLoaded=true;
 }
 
@@ -156,8 +164,10 @@ var onCreateAnswerSuccess=function(desc){
     remotePeerConnection.setLocalDescription(desc,function(){
         console.log("remotePeerConnection setLocalDescription after onAswer called");
     },onError);
-
     */
+    isICELoaded=false;
+    peerConnection.setLocalDescription(desc,function(){console.log('setLocalDescription finished.');},onError    );
+
 
     mediaObject.ANSWER=desc;
     isANSWERReady=true;

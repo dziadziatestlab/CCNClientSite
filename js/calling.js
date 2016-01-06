@@ -21,7 +21,7 @@ navigator.getUserMedia=navigator.mozGetUserMedia;
 function init(){
     localVideoElement=document.getElementById("localStream");
     //peerConnection=new mozRTCPeerConnection();
-    //remoteVideoElement=document.getElementsByName("remoteStream");
+    remoteVideoElement=document.getElementById("remoteStream");
 }
 
 var getMedia=function(){
@@ -46,7 +46,11 @@ var onError=function(e){
 var createOffer=function(){
     console.log('# createOffer called');
     peerConnection=new RTCPeerConnection();
-    peerConnection.onaddstream=function(){console.log('local onaddstream called !')};
+    peerConnection.onaddstream=function(e){
+        console.log('local onaddstream called !');
+        remoteVideoElement.src=window.URL.createObjectURL(e.stream);
+        remoteVideoElement.play();
+    };
     if(window.stream){
         peerConnection.addStream(stream);
         peerConnection.onicecandidate=gotIceCandidate;
