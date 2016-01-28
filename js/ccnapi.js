@@ -50,3 +50,13 @@ CCNAPI.getRemoteInfo=function(){
 
     WSConnection.send(JSON.stringify(data));
 }
+
+CCNAPI.getMedia=function(){
+    console.log('API getMedia called');
+    var data={
+        type:'GETMEDIA',
+        From:document.getElementById("name").value,
+        To:document.getElementById("calledName").value
+    };
+    WSConnection.send(JSON.stringify(data));
+}
