@@ -17,11 +17,14 @@
 <p>To:<textarea id="calledName">/test</textarea></p>
 <p><textarea id="ipAddress">127.0.0.1</textarea></p>
 <p><textarea id="portNumber">8000</textarea></p>
+<p>proxy server IP<textarea id="ipAddressICE">192.168.0.146</textarea></p>
+<p>proxy server PORT<textarea id="portNumberICE">8888</textarea></p>
 <button id="mediaBtn" onclick="getMedia()">GetMedia</button>
 <button id="offerBtn" onclick="createOffer()">CreateOffer</button>
 <button id="wsConnection" onclick="establishWSConnection()">WS connect</button>
 <button id="regBtn" onclick="CCNAPI.nameRegister()">Register</button>
 <button id="makeCall" onclick="CCNAPI.makeCall()">Make call</button>
 <button id="getDataTest" onclick="CCNAPI.getMedia()">Get Data Test</button>
+<button id="getDataTest" onclick="CCNAPI.getMedia()">ICE candidate override</button>
 </body>
 </html>

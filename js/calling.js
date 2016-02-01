@@ -10,6 +10,7 @@ var isANSWERReady=false;
 var mediaObject={};
 mediaObject.iceLocal=[]
 var testcan=[];
+var remoteTestCan=[];
 
 //var pc_config = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
 
@@ -100,6 +101,7 @@ function addIceCandidate(candidate){
     if(candidate) {
         var candidate = new mozRTCIceCandidate(candidate);
         console.log('candidate on local site: '+JSON.stringify(candidate));
+        remoteTestCan.push(candidate);
         peerConnection.addIceCandidate(candidate);
         //console.log(remotePeerConnection);
     }
