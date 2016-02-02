@@ -11,6 +11,7 @@ var mediaObject={};
 mediaObject.iceLocal=[]
 var testcan=[];
 var remoteTestCan=[];
+var proxyServer;
 
 //var pc_config = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
 
@@ -162,8 +163,17 @@ var gotRemoteSignalling=function(data){
 
     if(data.ICE){
         for(can in data.ICE){
-            addIceCandidate(data.ICE[can]);
+            console.log('candidate info: '+JSON.stringify(data.ICE[can]));
+            overrideIceServer(data.ICE[can]);
+            //addIceCandidate(data.ICE[can]);
         }
+    }
+
+    if(data.ProxyServer){
+        console.log("PROXY SERVER INFO received");
+        proxyServer={host:data.ProxyServer[0],
+                    port: data.ProxyServer[1]};
+
     }
 
 
@@ -183,6 +193,12 @@ var gotRemoteSignalling=function(data){
 
 }
 
+function overrideIceServer(data){
+    console.log("override IceServer called");
+    var tempdata=data.candidate.split(" ");
+    console.log('Ice candidate from remote afer split: '+tempdata);
+}
+
 function onCreateAnswerSuccess(desc){
     console.log("onCreateAnswerSuccess called");
     remotePeerConnection.setLocalDescription(desc,function(){
@@ -190,6 +206,11 @@ function onCreateAnswerSuccess(desc){
     },onError);
 
     remoteVideoElement.play();
+
+}
+
+function setProxy(){
+    console.log("setProxy called");
 
 }
 
