@@ -8,6 +8,8 @@ var remotePeerConnection;
 var isICELoaded=false;
 var isSDPLoaded=false;
 var isANSWERReady=false;
+var mediaLoop;
+
 
 var mediaObject={};
 mediaObject.iceLocal=[]
@@ -135,8 +137,11 @@ var gotRemoteSignalling=function(data){
 
         for(can in data.ICE){
             console.log("ICE data: \n"+JSON.stringify(data.ICE[can]));
+            overrideIceCandidate(data.ICE[can]);
             startRemote(data.ICE[can]);
         }
+
+
 
 
 
@@ -151,6 +156,23 @@ var gotRemoteSignalling=function(data){
 
 
     }
+    if(data.TYPE=='GETMEDIA'){
+        console.log("GETMEDIA type message received :\n"+JSON.stringify(data));
+        if(data.RESULT==='NOUSER') clearInterval(mediaLoop);
+    }
+
+
+}
+
+var overrideIceCandidate=function(candidate){
+    console.log('overrideIceCandidate called with data: '+JSON.stringify(candidate));
+    var tempIce=candidate.candidate.split(" ");
+    console.log('candidate length: '+tempIce.length);
+    tempIce[5]=document.getElementById("portNumberICE").value;
+    tempIce[4]=document.getElementById("ipAddressICE").value;
+    var tempCandidate=tempIce.join(" ");
+    console.log("joined candidate: "+tempCandidate);
+    candidate.candidate=tempCandidate;
 
 
 }
@@ -188,4 +210,12 @@ var startRemote=function(can){
         //console.log(remotePeerConnection);
         peerConnection.addIceCandidate(candidate);
     }
+}
+
+function startMediaRequest(){
+    console.log("startMedaiaRequest called");
+    mediaLoop=setInterval(function(){
+        console.log("getMedia ");
+        CCNAPI.getMedia();
+    },1000);
 }

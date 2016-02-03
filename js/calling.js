@@ -12,6 +12,9 @@ mediaObject.iceLocal=[]
 var testcan=[];
 var remoteTestCan=[];
 var proxyServer;
+var mediaLoop;
+
+
 
 //var pc_config = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
 
@@ -175,6 +178,10 @@ var gotRemoteSignalling=function(data){
                     port: data.ProxyServer[1]};
 
     }
+    if(data.TYPE=='GETMEDIA'){
+        console.log("GETMEDIA type message received :\n"+JSON.stringify(data));
+        if(data.RESULT==='NOUSER') clearInterval(mediaLoop);
+    };
 
 
 
@@ -214,7 +221,13 @@ function setProxy(){
 
 }
 
-
+function startMediaRequest(){
+    console.log("startMedaiaRequest called");
+    mediaLoop=setInterval(function(){
+        console.log("getMedia ");
+        CCNAPI.getMedia();
+    },1000);
+}
 
 
 /*
@@ -240,3 +253,4 @@ var onCreateAnswerSuccess=function(desc){
 
 }
 */
+
