@@ -168,7 +168,7 @@ var gotRemoteSignalling=function(data){
         for(can in data.ICE){
             console.log('candidate info: '+JSON.stringify(data.ICE[can]));
             overrideIceServer(data.ICE[can]);
-            //addIceCandidate(data.ICE[can]);
+            addIceCandidate(data.ICE[can]);
         }
     }
 
@@ -200,10 +200,17 @@ var gotRemoteSignalling=function(data){
 
 }
 
-function overrideIceServer(data){
-    console.log("override IceServer called");
-    var tempdata=data.candidate.split(" ");
-    console.log('Ice candidate from remote afer split: '+tempdata);
+function overrideIceServer(candidate){
+    console.log('overrideIceCandidate called with data: '+JSON.stringify(candidate));
+    var tempIce=candidate.candidate.split(" ");
+    console.log('candidate length: '+tempIce.length);
+    tempIce[5]=document.getElementById("portNumberICE").value;
+    tempIce[4]=document.getElementById("ipAddressICE").value;
+    var tempCandidate=tempIce.join(" ");
+    console.log("joined candidate: "+tempCandidate);
+    candidate.candidate=tempCandidate;
+
+
 }
 
 function onCreateAnswerSuccess(desc){
