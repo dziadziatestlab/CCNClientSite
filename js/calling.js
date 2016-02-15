@@ -246,7 +246,7 @@ function setProxy(){
 function startMediaRequest(){
     setTimeout(function(){
         CCNAPI.getMedia();
-    },2);
+    },50);
 
     /*
 
