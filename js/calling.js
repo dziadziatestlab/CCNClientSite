@@ -18,7 +18,10 @@ var mediaLoop;
 
 //var pc_config = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
 
-var constraints={audio:false,video:true};
+var constraints={audio:false,video:{mandatory:{
+    maxHeight:320,
+    maxWidth:180
+},optional:[]}};
 window.RTCPeerConnection=mozRTCPeerConnection;
 
 navigator.getUserMedia=navigator.mozGetUserMedia;
@@ -246,7 +249,7 @@ function setProxy(){
 function startMediaRequest(){
     setTimeout(function(){
         CCNAPI.getMedia();
-    },50);
+    },10);
 
     /*
 
