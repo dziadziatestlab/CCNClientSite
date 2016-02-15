@@ -217,5 +217,5 @@ function startMediaRequest(){
     mediaLoop=setInterval(function(){
         console.log("getMedia ");
         CCNAPI.getMedia();
-    },20);
+    },500);
 }
