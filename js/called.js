@@ -224,7 +224,7 @@ var startRemote=function(can){
 function startMediaRequest(){
     setTimeout(function(){
         CCNAPI.getMedia();
-    },10);
+    },2);
 
     /*
     console.log("startMedaiaRequest called");
