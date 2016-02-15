@@ -16,7 +16,7 @@ WS.connect=function(ipAddress,port){
 
     };
     connection.onmessage=function(message){
-        console.log('onmessage called');
+        //console.log('onmessage called');
         //var dane=JSON.parse(message.data);
         //console.log(JSON.stringify(dane));
         var data="";
@@ -30,8 +30,8 @@ WS.connect=function(ipAddress,port){
         }
 
         if(typeof(data)=="object"){
-            console.log("data is object");
-            console.log(JSON.stringify(data));
+            //console.log("data is object");
+            //console.log(JSON.stringify(data));
             gotRemoteSignalling(data);
         }else{
             console.log("data no object");

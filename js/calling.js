@@ -112,10 +112,12 @@ function addIceCandidate(candidate){
 }
 
 var gotRemoteSignalling=function(data){
-    console.log("gotRemoteSignalling called ");
-    console.log("type of localDescription: "+typeof(mediaObject.localDescription));
-    console.log("type of data.SDP: "+typeof(data.SDP));
-    console.log("data.SDP: \n"+data.SDP);
+    //console.log("gotRemoteSignalling called ");
+    //console.log("type of localDescription: "+typeof(mediaObject.localDescription));
+    //console.log("type of data.SDP: "+typeof(data.SDP));
+    //console.log("data.SDP: \n"+data.SDP);
+
+
     /*
     for(can in data.ICE){
         console.log("ICE data: \n"+JSON.stringify(data.ICE[can]));
@@ -179,8 +181,11 @@ var gotRemoteSignalling=function(data){
 
     }
     if(data.TYPE=='GETMEDIA'){
-        console.log("GETMEDIA type message received :\n"+JSON.stringify(data));
-        if(data.RESULT==='NOUSER') clearInterval(mediaLoop);
+        //console.log("GETMEDIA type message received :\n"+JSON.stringify(data));
+        if(data.RESULT==='NOUSER')
+            console.log('No user registered. Request stopped !');
+            //clearInterval(mediaLoop);
+        else startMediaRequest();
     };
 
 
@@ -229,11 +234,19 @@ function setProxy(){
 }
 
 function startMediaRequest(){
+    setTimeout(function(){
+        CCNAPI.getMedia();
+    },10);
+
+    /*
+
     console.log("startMedaiaRequest called");
     mediaLoop=setInterval(function(){
         console.log("getMedia ");
         CCNAPI.getMedia();
     },20);
+
+    */
 }
 
 

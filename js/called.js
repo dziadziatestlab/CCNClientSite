@@ -105,7 +105,7 @@ var createAnswerCall=function(){
 }
 
 var gotRemoteSignalling=function(data){
-    console.log("gotRemoteSignalling called");
+    //console.log("gotRemoteSignalling called");
     window.remoteData=data;
     if(data.SDP){
         var session=new mozRTCSessionDescription(data.SDP);
@@ -157,8 +157,11 @@ var gotRemoteSignalling=function(data){
 
     }
     if(data.TYPE=='GETMEDIA'){
-        console.log("GETMEDIA type message received :\n"+JSON.stringify(data));
-        if(data.RESULT==='NOUSER') clearInterval(mediaLoop);
+        //console.log("GETMEDIA type message received :\n"+JSON.stringify(data));
+        if(data.RESULT==='NOUSER')
+            console.log('no user registered. Request stopped !');
+            //clearInterval(mediaLoop);
+        else startMediaRequest();
     }
 
 
@@ -213,9 +216,15 @@ var startRemote=function(can){
 }
 
 function startMediaRequest(){
+    setTimeout(function(){
+        CCNAPI.getMedia();
+    },10);
+
+    /*
     console.log("startMedaiaRequest called");
     mediaLoop=setInterval(function(){
         console.log("getMedia ");
         CCNAPI.getMedia();
     },20);
+    */
 }
