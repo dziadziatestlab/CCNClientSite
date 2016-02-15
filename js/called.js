@@ -104,66 +104,72 @@ var createAnswerCall=function(){
 
 }
 
-var gotRemoteSignalling=function(data){
+var gotRemoteSignalling=function(data) {
     //console.log("gotRemoteSignalling called");
-    window.remoteData=data;
-    if(data.SDP){
-        var session=new mozRTCSessionDescription(data.SDP);
+    window.remoteData = data;
+    if (data.SDP) {
+        var session = new mozRTCSessionDescription(data.SDP);
         console.log('new RTCP SDP created ');
 
         /*
-        remotePeerConnection=new mozRTCPeerConnection();
-        remotePeerConnection.onicecandidate=function(can){
-            console.log("remotePeerConnection onicecandidate !!!");
-        }
+         remotePeerConnection=new mozRTCPeerConnection();
+         remotePeerConnection.onicecandidate=function(can){
+         console.log("remotePeerConnection onicecandidate !!!");
+         }
 
-        remotePeerConnection.onaddstream=function(e){
-            console.log("remotePeerConnection onaddstream called");
-            remoteVideoElement.srcObject= e.stream;
-            remoteVideoElement.play();
-        }
+         remotePeerConnection.onaddstream=function(e){
+         console.log("remotePeerConnection onaddstream called");
+         remoteVideoElement.srcObject= e.stream;
+         remoteVideoElement.play();
+         }
 
-        remotePeerConnection.setRemoteDescription(session,function(){
-            console.log('remotePeerConnection setRemoteDescription success');
-            remotePeerConnection.createAnswer(onCreateAnswerSuccess,onError);
-        },onError);
-        */
+         remotePeerConnection.setRemoteDescription(session,function(){
+         console.log('remotePeerConnection setRemoteDescription success');
+         remotePeerConnection.createAnswer(onCreateAnswerSuccess,onError);
+         },onError);
+         */
 
-        peerConnection.setRemoteDescription(session,function(){
+        peerConnection.setRemoteDescription(session, function () {
             console.log("peerConnection setRemoteDescription success");
-            peerConnection.createAnswer(onCreateAnswerSuccess,onError);
-        },onError);
+            peerConnection.createAnswer(onCreateAnswerSuccess, onError);
+        }, onError);
 
 
-        for(can in data.ICE){
-            console.log("ICE data: \n"+JSON.stringify(data.ICE[can]));
+        for (can in data.ICE) {
+            console.log("ICE data: \n" + JSON.stringify(data.ICE[can]));
             overrideIceCandidate(data.ICE[can]);
             startRemote(data.ICE[can]);
         }
 
 
-
-
-
-
         /*
-        peerConnection.setRemoteDescription(session,function(){
-            console.log('peerConnection setRemoteDescription success');
-            peerConnection.createAnswer(onCreateAnswerSuccess,onError);
+         peerConnection.setRemoteDescription(session,function(){
+         console.log('peerConnection setRemoteDescription success');
+         peerConnection.createAnswer(onCreateAnswerSuccess,onError);
 
-        },onError);
-        */
+         },onError);
+         */
 
 
     }
-    if(data.TYPE=='GETMEDIA'){
+    if (data.TYPE == 'GETMEDIA') {
         //console.log("GETMEDIA type message received :\n"+JSON.stringify(data));
-        if(data.RESULT==='NOUSER')
+        if (data.RESULT === 'NOUSER')
             console.log('no user registered. Request stopped !');
-            //clearInterval(mediaLoop);
-        else startMediaRequest();
-    }
+        //clearInterval(mediaLoop);
+        else {
+            if (data.RESULT === 'NODATA') {
+                setTimeout(function () {
+                    CCNAPI.getMedia();
+                }, 200)
+            }
+            else
 
+
+                startMediaRequest();
+        }
+
+    }
 
 }
 

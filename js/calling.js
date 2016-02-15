@@ -185,7 +185,17 @@ var gotRemoteSignalling=function(data){
         if(data.RESULT==='NOUSER')
             console.log('No user registered. Request stopped !');
             //clearInterval(mediaLoop);
-        else startMediaRequest();
+        else {
+            if(data.RESULT==='NODATA'){
+                setTimeout(function(){
+                    CCNAPI.getMedia();
+                },200);
+            }
+
+            else
+
+            startMediaRequest();
+        }
     };
 
 
