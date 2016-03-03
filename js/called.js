@@ -158,9 +158,13 @@ var gotRemoteSignalling=function(data) {
     }
     if (data.TYPE == 'GETMEDIA') {
         //console.log("GETMEDIA type message received :\n"+JSON.stringify(data));
-        if (data.RESULT === 'NOUSER')
+        if (data.RESULT === 'NOUSER') {
             console.log('no user registered. Request stopped !');
-        //clearInterval(mediaLoop);
+            //clearInterval(mediaLoop);
+            setTimeout(function(){
+                CCNAPI.getMedia();
+            },150);
+        }
         else {
             if (data.RESULT === 'NODATA') {
                 setTimeout(function () {
@@ -228,7 +232,7 @@ var startRemote=function(can){
 function startMediaRequest(){
     setTimeout(function(){
         CCNAPI.getMedia();
-    },10);
+    },50);
 
     /*
     console.log("startMedaiaRequest called");

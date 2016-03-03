@@ -40,6 +40,7 @@ var getMedia=function(){
 var gotStream=function(stream){
     console.log('# gotStream called');
     window.stream=stream;
+    window.testStream=window.URL.createObjectURL(stream);
     localVideoElement.src=window.URL.createObjectURL(stream);
     localVideoElement.play();
 }
@@ -185,9 +186,13 @@ var gotRemoteSignalling=function(data){
     }
     if(data.TYPE=='GETMEDIA'){
         //console.log("GETMEDIA type message received :\n"+JSON.stringify(data));
-        if(data.RESULT==='NOUSER')
+        if(data.RESULT==='NOUSER') {
             console.log('No user registered. Request stopped !');
+            setTimeout(function () {
+                CCNAPI.getMedia();
+            }, 150);
             //clearInterval(mediaLoop);
+        }
         else {
             if(data.RESULT==='NODATA'){
                 setTimeout(function(){
@@ -249,7 +254,7 @@ function setProxy(){
 function startMediaRequest(){
     setTimeout(function(){
         CCNAPI.getMedia();
-    },10);
+    },50);
 
     /*
 
