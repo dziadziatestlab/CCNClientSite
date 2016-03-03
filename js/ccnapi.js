@@ -12,18 +12,21 @@ CCNAPI.nameRegister=function(name){
 
     var data={
         type:"REGISTER",
-        userId:name,
-        SDP:mediaObject.localDescription,
-        ICE:mediaObject.iceLocal
+        userId:name
+        //SDP:mediaObject.localDescription,
+        //ICE:mediaObject.iceLocal
     };
+
     if(typeof(name)!="string")     data.userId=document.getElementById("name").value;
+    /*
     if(isANSWERReady) data.ANSWER=mediaObject.ANSWER;
     if(isICELoaded && isSDPLoaded){
         console.log('data to be send: '+JSON.stringify(data));
         WSConnection.send(JSON.stringify(data));
     }else console.log('Waiting for all information');
 
-
+    */
+    wsConnection.send(JSON.stringify(data));
 
 
 }
