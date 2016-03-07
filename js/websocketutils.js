@@ -36,6 +36,12 @@ WS.connect=function(ipAddress,port){
         }else{
             console.log("data no object");
             console.log(message.data);
+            console.log('type of data: '+typeof(message.data));
+            console.log('calling gotRemoteStreamCCN !!!!!!!');
+            if(typeof(message.data)=="object"){
+                gotRemoteStreamCCN(message.data);
+            }
+
         };
 
     };

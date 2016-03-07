@@ -101,7 +101,7 @@ function playRecorded(){
 
 function wsConnect(){
     console.log('wsconnect called ');
-    window.wsConnection=WS.connect("192.168.0.162",8000);
+    window.wsConnection=WS.connect(document.getElementById("ipAddress").value,document.getElementById("portNumber").value);
 }
 
 function wsRegister(){

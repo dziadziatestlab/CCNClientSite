@@ -38,7 +38,7 @@ CCNAPI.makeCall=function(){
         From:document.getElementById("name").value,
         To:document.getElementById("calledName").value
     };
-    WSConnection.send(JSON.stringify(data));
+    wsConnection.send(JSON.stringify(data));
 
 
 }
@@ -51,7 +51,7 @@ CCNAPI.getRemoteInfo=function(){
         To:document.getElementById("calledName").value
     }
 
-    WSConnection.send(JSON.stringify(data));
+    wsConnection.send(JSON.stringify(data));
 }
 
 CCNAPI.getMedia=function(){
@@ -61,5 +61,5 @@ CCNAPI.getMedia=function(){
         From:document.getElementById("name").value,
         To:document.getElementById("calledName").value
     };
-    WSConnection.send(JSON.stringify(data));
+    wsConnection.send(JSON.stringify(data));
 }

@@ -6,16 +6,32 @@ var getStreamBtn=document.getElementById("getStream");
 getStreamBtn.onclick=getMediaStream;
 var wsConnectBtn=document.getElementById("wsConnect");
 wsConnectBtn.onclick=wsConnectF;
+var registerBtn=document.getElementById("register");
+registerBtn.onclick=wsRegister;
+var remoteVideo=document.getElementById("remoteVideo");
+remoteVideo.play();
 
 
+var recordedBlobs=[];
+window.buffer=new Blob(recordedBlobs,{type:'video/webm'});
+var stream=window.URL.createObjectURL(buffer);
+remoteVideo.src=stream;
 
 
 function wsConnectF(){
     console.log('wsConnectF called');
-    window.WSConnection=WS.connect("192.168.0.162",8000);
+    window.wsConnection=WS.connect(document.getElementById("ipAddress").value,document.getElementById("portNumber").value);
 }
 
+function playVideo(data){
+    recordedBlobs.push(data);
+    console.log('PLAYVIDEO called !!!!');
 
+    //console.log('buffer'+ buffer);
+
+
+    //remoteVideo.play();
+}
 
 
 function getMediaStream(){
@@ -30,6 +46,7 @@ var gotRemoteSignalling=function(data) {
     //console.log("type of localDescription: "+typeof(mediaObject.localDescription));
     //console.log("type of data.SDP: "+typeof(data.SDP));
     //console.log("data.SDP: \n"+data.SDP);
+    console.log('type of data :'+typeof(data)+ '!!!!!!!!!!!!!!!' );
 
 
     /*
@@ -113,9 +130,25 @@ var gotRemoteSignalling=function(data) {
                 }, 200);
             }
 
-            else
+            else {
+                console.log('Received answer: '+JSON.stringify(data));
+                setTimeout(function () {
+                    CCNAPI.getMedia();
+                }, 150);
 
-                startMediaRequest();
+                //startMediaRequest();
+            }
         }
     }
+    //playVideo(data);
+}
+
+function gotRemoteStreamCCN(data){
+    console.log('gotRemoteStream called !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    playVideo(data);
+}
+
+function wsRegister(){
+    console.log('wsRegister called');
+    CCNAPI.nameRegister();
 }
