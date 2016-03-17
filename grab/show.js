@@ -9,13 +9,31 @@ wsConnectBtn.onclick=wsConnectF;
 var registerBtn=document.getElementById("register");
 registerBtn.onclick=wsRegister;
 var remoteVideo=document.getElementById("remoteVideo");
-remoteVideo.play();
+remoteVideo.onended=videoEnd;
+var playVideoBtn=document.getElementById("playVideo");
+playVideoBtn.onclick=playVideoPressed;
+//remoteVideo.play();
 
+
+function videoEnd(){
+    console.log("VideoEnd called");
+    playVideoPressed();
+};
 
 var recordedBlobs=[];
-window.buffer=new Blob(recordedBlobs,{type:'video/webm'});
-var stream=window.URL.createObjectURL(buffer);
-remoteVideo.src=stream;
+//window.buffer=new Blob(recordedBlobs,{type:'video/webm'});
+//var stream=window.URL.createObjectURL(buffer);
+//remoteVideo.src=stream;
+
+
+function playVideoPressed(){
+    var nBlob=new Blob(recordedBlobs,{type:"video/webm"});
+    var stream=window.URL.createObjectURL(nBlob);
+    remoteVideo.src=stream;
+    //remoteVideo.play();
+    recordedBlobs=[];
+
+}
 
 
 function wsConnectF(){
@@ -24,6 +42,14 @@ function wsConnectF(){
 }
 
 function playVideo(data){
+    //var rBlobs=[];
+    //rBlobs.push(data);
+    //var blob=new Blob(rBlobs,{type:"video/webm"});
+    //console.log("playVideo blob: ");
+    //console.log(blob);
+    //var st=window.URL.createObjectURL(blob);
+    //remoteVideo.src=st;
+    //remoteVideo.play();
     recordedBlobs.push(data);
     console.log('PLAYVIDEO called !!!!');
 
@@ -118,16 +144,19 @@ var gotRemoteSignalling=function(data) {
         //console.log("GETMEDIA type message received :\n"+JSON.stringify(data));
         if (data.RESULT === 'NOUSER') {
             console.log('No user registered. Request stopped !');
+            /*
             setTimeout(function () {
                 CCNAPI.getMedia();
             }, 150);
             //clearInterval(mediaLoop);
+
+            */
         }
         else {
             if (data.RESULT === 'NODATA') {
                 setTimeout(function () {
                     CCNAPI.getMedia();
-                }, 200);
+                }, 700);
             }
 
             else {

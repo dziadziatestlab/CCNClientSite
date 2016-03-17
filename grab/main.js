@@ -26,7 +26,7 @@ console.log("getUserMedia: "+navigator.getUserMedia);
 
 var constraints={
     video:true,
-    audio:true
+    audio:false
 }
 
 
@@ -58,7 +58,8 @@ startRecord.onclick=startRecording;
 
 function startRecording(){
     console.log('startRecording called');
-    var options={mimeType:'video/webm',bitsPerSecond:100000};
+    //var options={mimeType:'video/webm',bitsPerSecond:100000};
+    var options={mimeType:'video/webm'};
     recordedBlobs=[];
     try{
         console.log('trying to create mediaRecorder.');
@@ -68,7 +69,7 @@ function startRecording(){
 
     }
     mediaRecorder.ondataavailable=handleDataAvailable;
-    mediaRecorder.start(10);
+    mediaRecorder.start(5);
     console.log('mediaRecorder started. '+mediaRecorder);
 }
 

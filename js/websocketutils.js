@@ -7,7 +7,7 @@ var WS={};
 
 WS.connect=function(ipAddress,port){
     window.WebSocket=window.WebSocket||window.MozWebSocket;
-    var connection=new WebSocket('ws://'+ipAddress+':'+port);
+    var connection=new WebSocket('ws://'+ipAddress+'/'+port);
     connection.onopen=function(){
 
     };
