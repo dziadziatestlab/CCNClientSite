@@ -9,7 +9,7 @@ wsConnectBtn.onclick=wsConnectF;
 var registerBtn=document.getElementById("register");
 registerBtn.onclick=wsRegister;
 var remoteVideo=document.getElementById("remoteVideo");
-remoteVideo.onended=videoEnd;
+//remoteVideo.onended=videoEnd;
 var playVideoBtn=document.getElementById("playVideo");
 playVideoBtn.onclick=playVideoPressed;
 //remoteVideo.play();
@@ -24,6 +24,29 @@ var recordedBlobs=[];
 //window.buffer=new Blob(recordedBlobs,{type:'video/webm'});
 //var stream=window.URL.createObjectURL(buffer);
 //remoteVideo.src=stream;
+
+
+var  mediaSource=new MediaSource;
+mediaSource.addEventListener('sourceopen',mediaSourceOpenHandler);
+remoteVideo.src=window.URL.createObjectURL(mediaSource);
+remoteVideo.play();
+
+function mediaSourceOpenHandler(_){
+
+    var mediaSource=this;
+    var mimeCodec="video/webm";
+    var sourceBuffer=mediaSource.addSourceBuffer(mimeCodec);
+    sourceBuffer.addEventListener('updateend',function(_){
+        console.log("sourceBuffer updated");
+    });
+    window.sourceB=sourceBuffer;
+}
+
+
+
+
+
+
 
 
 function playVideoPressed(){
@@ -50,13 +73,23 @@ function playVideo(data){
     //var st=window.URL.createObjectURL(blob);
     //remoteVideo.src=st;
     //remoteVideo.play();
-    recordedBlobs.push(data);
+    //recordedBlobs.push(data);
     console.log('PLAYVIDEO called !!!!');
 
     //console.log('buffer'+ buffer);
 
 
     //remoteVideo.play();
+
+    var rb=[];
+    rb.push(data);
+    var b=new Blob(rb,{type:'video/webm'});
+    var f=new FileReader();
+    f.onloadend=function(){
+        window.sourceB.appendBuffer(f.result);
+
+    };
+    f.readAsArrayBuffer(b);
 }
 
 

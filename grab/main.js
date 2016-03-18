@@ -77,10 +77,10 @@ function handleDataAvailable(event){
     //console.log('handleDataAvailable called !');
     if(event.data&&event.data.size>0){
         recordedBlobs.push(event.data);
-        //wsConnection.send(event.data);
+        wsConnection.send(event.data);
     }
-    mediaRecorder.stop();
-    mediaRecorder.start();
+    //mediaRecorder.stop();
+    //mediaRecorder.start();
 
     //console.log(event.data);
 
