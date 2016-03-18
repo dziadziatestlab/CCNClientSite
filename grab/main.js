@@ -69,17 +69,20 @@ function startRecording(){
 
     }
     mediaRecorder.ondataavailable=handleDataAvailable;
-    mediaRecorder.start(5);
+    mediaRecorder.start(100);
     console.log('mediaRecorder started. '+mediaRecorder);
 }
 
 function handleDataAvailable(event){
-    console.log('handleDataAvailable called !');
+    //console.log('handleDataAvailable called !');
     if(event.data&&event.data.size>0){
         recordedBlobs.push(event.data);
-        wsConnection.send(event.data);
+        //wsConnection.send(event.data);
     }
-    console.log(event.data);
+    mediaRecorder.stop();
+    mediaRecorder.start();
+
+    //console.log(event.data);
 
 }
 
@@ -96,7 +99,13 @@ playRecord.onclick=playRecorded;
 function playRecorded(){
     console.log('playRecorded called');
     var buffer=new Blob(recordedBlobs,{type:'video/webm'});
+    //var buffer=new Blob(recordedBlobs);
+    recordedBlobs=[];
     playVideo.src=window.URL.createObjectURL(buffer);
+    playVideo.onended=function(){
+        console.log("onened event fired");
+        playRecorded();
+    }
     playVideo.play();
 }
 
