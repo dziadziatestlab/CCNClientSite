@@ -23,12 +23,22 @@ registerBtn.onclick=wsRegister;
 navigator.getUserMedia=navigator.getUserMedia||navigator.mozGetUserMedia||navigator.webkitGetUserMedia;
 console.log("getUserMedia: "+navigator.getUserMedia);
 
-
+/*
 var constraints={
     video:true,
     audio:false
 }
+*/
 
+var constraints={
+    video:{
+        width:{min:320,ideal:320},
+        height:{min:240},
+        frameRate:60,
+        facingMode:"user"
+    },
+    audio:false
+}
 
 
 
@@ -69,7 +79,7 @@ function startRecording(){
 
     }
     mediaRecorder.ondataavailable=handleDataAvailable;
-    mediaRecorder.start(100);
+    mediaRecorder.start(1);
     console.log('mediaRecorder started. '+mediaRecorder);
 }
 
@@ -78,6 +88,7 @@ function handleDataAvailable(event){
     if(event.data&&event.data.size>0){
         recordedBlobs.push(event.data);
         wsConnection.send(event.data);
+        console.log("Data chunk size: "+event.data.size);
     }
     //mediaRecorder.stop();
     //mediaRecorder.start();
