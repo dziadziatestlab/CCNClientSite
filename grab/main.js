@@ -19,6 +19,7 @@ connectBtn.onclick=wsConnect;
 var registerBtn=document.getElementById("register");
 registerBtn.onclick=wsRegister;
 
+var mediaSender=null;
 
 navigator.getUserMedia=navigator.getUserMedia||navigator.mozGetUserMedia||navigator.webkitGetUserMedia;
 console.log("getUserMedia: "+navigator.getUserMedia);
@@ -122,12 +123,16 @@ function playRecorded(){
 
 function wsConnect(){
     console.log('wsconnect called ');
-    window.wsConnection=WS.connect(document.getElementById("ipAddress").value,document.getElementById("portNumber").value);
+    //window.wsConnection=WS.connect(document.getElementById("ipAddress").value,document.getElementById("portNumber").value);
+    var proxyInfo=document.getElementById("ipAddress").value;//+":"+document.getElementById("portNumber").value;
+    if(mediaSender==null)  mediaSender=new Worker('../js/MediaSender.js');
+    mediaSender.postMessage({type:"connect",proxyIP:proxyInfo,serviceName:document.getElementById("portNumber").value});
 }
 
 function wsRegister(){
     console.log('wsRegister called');
-    CCNAPI.nameRegister();
+    //CCNAPI.nameRegister();
+    mediaSender.postMessage({type:'register',name:document.getElementById("name").value});
 }
 
 
