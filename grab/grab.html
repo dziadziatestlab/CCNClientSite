@@ -5,25 +5,43 @@
     <title>Media grab</title>
     <script src="../js/websocketutils.js"></script>
     <script src="../js/ccnapi.js"></script>
+    <link rel="stylesheet" href="../css/maincss.css" >
 </head>
 
 <body>
-
+<div id="videoPanel">
 <video id="localVideo"></video>
 <video id="playVideo"></video>
-<p>From:<textarea id="name">/robert</textarea></p>
-<p>To:<textarea id="calledName">/test</textarea></p>
-<p>Proxy address:</p>
-<p><textarea id="ipAddress">localhost:8080</textarea></p>
-<p><textarea id="portNumber">Server/start</textarea></p>
-<button id="startR">start recording</button>
-<button id="stopR">stop recording</button>
-<button id="playR">play recorded</button>
-<button id="wsconnect">connect</button>
-<button id="register">Register</button>
+</div>
 
+<div id="controlPanel">
+<div>
+    <p>From: </p><textarea id="name">/robert</textarea>
+</div>
+    <div>
+        <p>To:</p><textarea id="calledName">/test</textarea>
+    </div>
 
+    <div>
+        <p>Proxy address:</p>
+        <textarea id="ipAddress">192.168.0.220:8080</textarea>
+    </div>
+    <div>
+        <p>Proxy ServiceName</p>
+        <textarea id="portNumber">Server/one</textarea>
+    </div>
+    <div>
+        <p>RoutingTag</p><textarea id="routingTag">routingTag</textarea>
+    </div>
+</div>
+
+<div id="buttonsPanel">
+    <button id="wsconnect">connect</button>
+    <button id="register">Register</button>
+    <button id="startR">start recording</button>
+    <button id="stopR">stop recording</button>
+    <button id="playR">play recorded</button>
+</div>
 <script src="main.js"></script>
-
 </body>
 </html>

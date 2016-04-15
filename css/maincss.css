@@ -1,5 +1,24 @@
+body{
+
+}
+
+#videoPanel{
+    height: 400px;
+}
+
 #localStream{
     height: 100px;
     width: 100px;
     background-color: aqua;
+}
+
+#controlPanel > div {
+    display: inline-block;
+    background-color: aqua;
+}
+
+#buttonsPanel{
+    padding: 10px;
+    background-color: darkgray;
+    display: inline-block;
 }
