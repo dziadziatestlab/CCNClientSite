@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Media grab</title>
     <script src="../js/websocketutils.js"></script>
-    <script src="../js/ccnapi.js"></script>
     <link rel="stylesheet" href="../css/maincss.css" >
 </head>
 
@@ -12,6 +11,7 @@
 <div id="videoPanel">
 <video id="localVideo"></video>
 <video id="playVideo"></video>
+    <video id="remoteVideo"></video>
 </div>
 
 <div id="controlPanel">
@@ -42,7 +42,9 @@
     <button id="stopR">stop recording</button>
     <button id="playR">play recorded</button>
     <button id="getLocalMedia">Start local media</button>
+    <button id="getRemoteStream">Get RemoteStream</button>
 </div>
 <script src="main.js"></script>
+<script src="show.js"></script>
 </body>
 </html>

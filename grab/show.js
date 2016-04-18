@@ -2,8 +2,10 @@
  * Created by Robert on 2016-03-03.
  */
 
-var getStreamBtn=document.getElementById("getStream");
+var getStreamBtn=document.getElementById("getRemoteStream");
 getStreamBtn.onclick=getMediaStream;
+
+/*
 var wsConnectBtn=document.getElementById("wsConnect");
 wsConnectBtn.onclick=wsConnectF;
 var registerBtn=document.getElementById("register");
@@ -13,7 +15,7 @@ var remoteVideo=document.getElementById("remoteVideo");
 var playVideoBtn=document.getElementById("playVideo");
 playVideoBtn.onclick=playVideoPressed;
 //remoteVideo.play();
-
+*/
 
 function videoEnd(){
     console.log("VideoEnd called");
@@ -94,11 +96,44 @@ function playVideo(data){
 
 
 function getMediaStream(){
+
     console.log('getMediaStream called');
+    /*
     setTimeout(function(){
         CCNAPI.getMedia();
     },50);
+
+    */
+
+    mediaSender.addEventListener('message',function(message){
+        console.log("Worker said !!!");
+        var data="";
+        try{
+            data=JSON.parse(message.data);
+            console.log("parsing message OK !!!");
+
+        }
+        catch(e){
+            console.log("No possibility to catch")
+        }
+
+
+        gotRemoteStreamCCN(message.data);
+    });
+
+
+    var data={
+        type:'remoteStream',
+        From:document.getElementById("name").value,
+        To:document.getElementById("calledName").value,
+        callback:null
+    };
+    mediaSender.postMessage(data);
+
 }
+
+
+
 
 var gotRemoteSignalling=function(data) {
     console.log("gotRemoteSignalling called ");
@@ -106,6 +141,14 @@ var gotRemoteSignalling=function(data) {
     //console.log("type of data.SDP: "+typeof(data.SDP));
     //console.log("data.SDP: \n"+data.SDP);
     console.log('type of data :'+typeof(data)+ '!!!!!!!!!!!!!!!' );
+
+
+
+
+
+
+
+
 
 
     /*
