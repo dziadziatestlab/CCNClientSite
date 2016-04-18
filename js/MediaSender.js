@@ -32,8 +32,15 @@ self.addEventListener('message',function(e){
 
 });
 
-self.doRequest=function(data){
+
+self.doRequest=function(dataFull){
     console.log("worker, message to send: "+JSON.stringify(data));
+    var data={
+          type:'GETMEDIA',
+          From:dataFull.From,
+          To:dataFull.To
+       };
+
     self.ws.send(JSON.stringify(data));
 }
 
