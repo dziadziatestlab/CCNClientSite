@@ -5,17 +5,21 @@
 self.ws=null;
 
 self.addEventListener('message',function(e){
-    console.log('worker called with data: ');
-    console.log(JSON.stringify(e.data));
+    //console.log('worker called with data: !!!');
+    //console.log(JSON.stringify(e.data));
     var data= e.data;
     if(data.type){
         switch (data.type){
             case 'connect':
-                console.log("connect command received");
+                //console.log("connect command received");
                 self.doConnect(data);
                 break;
             case 'register':
                 self.doRegister(data);
+                break;
+            case 'mediaStream':
+                //console.log("worker mediaStream case block !!!");
+                self.doSendData(data.data);
                 break;
             default :
                 console.log("undefined command received");
@@ -24,6 +28,11 @@ self.addEventListener('message',function(e){
     }
 
 });
+self.doSendData= function (data) {
+    self.ws.send(data);
+    //console.log("Worker !. Data sent to server");
+}
+
 self.doConnect=function(data){
     if(self.ws==null){
         self.ws= new WebSocket('ws://'+data.proxyIP+'/'+data.serviceName);
@@ -44,5 +53,5 @@ self.doRegister=function(data){
         //ICE:mediaObject.iceLocal
     };
     self.ws.send(JSON.stringify(data));
-    
+
 }

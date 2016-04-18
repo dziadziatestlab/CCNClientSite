@@ -13,6 +13,7 @@ var mediaRecorder;
 var startRecord=document.getElementById("startR");
 var stopRecord=document.getElementById("stopR");
 var playRecord=document.getElementById("playR");
+var startLocal=document.getElementById("getLocalMedia");
 var recordedBlobs;
 var connectBtn=document.getElementById("wsconnect");
 connectBtn.onclick=wsConnect;
@@ -42,9 +43,9 @@ var constraints={
 }
 
 
-
-navigator.getUserMedia(constraints,successCallback,errorCallback);
-
+startLocal.onclick=function() {
+    navigator.getUserMedia(constraints, successCallback, errorCallback);
+}
 
 
 function successCallback(stream){
@@ -88,7 +89,10 @@ function handleDataAvailable(event){
     //console.log('handleDataAvailable called !');
     if(event.data&&event.data.size>0){
         recordedBlobs.push(event.data);
-        wsConnection.send(event.data);
+        //wsConnection.send(event.data);
+        mediaSender.postMessage({type:'mediaStream',data:event.data});
+
+
         console.log("Data chunk size: "+event.data.size);
     }
     //mediaRecorder.stop();
