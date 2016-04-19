@@ -82,12 +82,13 @@ self.doConnect=function(data){
     }
 }
 self.doRegister=function(data){
+    console.log('WORKER, doRegister input data: '+JSON.stringify(data));
     var data={
         type:"REGISTER",
-        userId:data.name
-        //SDP:mediaObject.localDescription,
-        //ICE:mediaObject.iceLocal
+        userId:data.name,
+        routingTag:data.routingTag
     };
+    console.log('WORKER, doRegister output data: '+JSON.stringify(data));
     self.ws.send(JSON.stringify(data));
 
 }

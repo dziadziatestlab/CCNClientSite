@@ -126,7 +126,7 @@ function wsConnect(){
 
 function wsRegister(){
     console.log('wsRegister called');
-    mediaSender.postMessage({type:'register',name:document.getElementById("name").value});
+    mediaSender.postMessage({type:'register',name:document.getElementById("name").value,routingTag:document.getElementById("routingTag").value});
 }
 
 
