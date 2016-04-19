@@ -23,7 +23,7 @@ function mediaSourceOpenHandler(_){
     var mimeCodec="video/webm";
     var sourceBuffer=mediaSource.addSourceBuffer(mimeCodec);
     sourceBuffer.addEventListener('updateend',function(_){
-        console.log("sourceBuffer updated");
+        //#console.log("sourceBuffer updated");
     });
     window.sourceB=sourceBuffer;
 }
@@ -53,7 +53,7 @@ function playVideo(data){
     //remoteVideo.src=st;
     //remoteVideo.play();
     //recordedBlobs.push(data);
-    console.log('PLAYVIDEO called !!!!');
+    //#console.log('PLAYVIDEO called !!!!');
 
     //console.log('buffer'+ buffer);
 
@@ -77,17 +77,18 @@ function getMediaStream(){
     console.log('getMediaStream called');
 
     mediaSender.addEventListener('message',function(message){
-        console.log("Worker said !!!");
+        //#console.log("Worker said !!!");
+        /*
         var data="";
         try{
             data=JSON.parse(message.data);
-            console.log("parsing message OK !!!");
+            //#console.log("parsing message OK !!!");
 
         }
         catch(e){
             console.log("No possibility to catch")
         }
-
+        */
 
         gotRemoteStreamCCN(message.data);
     });
@@ -106,13 +107,13 @@ function getMediaStream(){
 
 
 var gotRemoteSignalling=function(data) {
-    console.log("gotRemoteSignalling called ");
-    console.log('type of data :'+typeof(data)+ '!!!!!!!!!!!!!!!' );
+    //#console.log("gotRemoteSignalling called ");
+    //#console.log('type of data :'+typeof(data)+ '!!!!!!!!!!!!!!!' );
 
 
     if (data.ANSWER) {
-        console.log("ANSWER RECEIVED !!!!");
-        console.log(JSON.stringify(data.ANSWER));
+        //#console.log("ANSWER RECEIVED !!!!");
+        //#console.log(JSON.stringify(data.ANSWER));
         var session = new mozRTCSessionDescription(data.ANSWER);
         peerConnection.setRemoteDescription(session,
             function () {
@@ -141,7 +142,7 @@ var gotRemoteSignalling=function(data) {
             }
 
             else {
-                console.log('Received answer: '+JSON.stringify(data));
+                //#console.log('Received answer: '+JSON.stringify(data));
                 setTimeout(function () {
                     CCNAPI.getMedia();
                 }, 150);
@@ -154,7 +155,7 @@ var gotRemoteSignalling=function(data) {
 }
 
 function gotRemoteStreamCCN(data){
-    console.log('gotRemoteStream called !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    //#console.log('gotRemoteStream called !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     playVideo(data);
 }
 

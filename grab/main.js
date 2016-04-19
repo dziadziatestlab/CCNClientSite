@@ -23,7 +23,7 @@ registerBtn.onclick=wsRegister;
 var mediaSender=null;
 
 navigator.getUserMedia=navigator.getUserMedia||navigator.mozGetUserMedia||navigator.webkitGetUserMedia;
-console.log("getUserMedia: "+navigator.getUserMedia);
+    console.log("getUserMedia: "+navigator.getUserMedia);
 
 /*
 var constraints={
@@ -90,7 +90,7 @@ function handleDataAvailable(event){
     if(event.data&&event.data.size>0){
         recordedBlobs.push(event.data);
         mediaSender.postMessage({type:'mediaStream',data:event.data});
-        console.log("Data chunk size: "+event.data.size);
+        //#console.log("Data chunk size: "+event.data.size);
     }
 }
 
@@ -131,7 +131,7 @@ function wsRegister(){
 
 
 var gotRemoteSignalling=function(data) {
-    console.log("gotRemoteSignalling called ");
+    //#console.log("gotRemoteSignalling called ");
 
     if (data.TYPE == 'GETMEDIA') {
         //console.log("GETMEDIA type message received :\n"+JSON.stringify(data));
