@@ -62,7 +62,7 @@ function playVideo(data){
 
     var rb=[];
     rb.push(data);
-    var b=new Blob(rb,{type:'video/webm'});
+    var b=new Blob(rb,{type:'video/mp4'});
     var f=new FileReader();
     f.onloadend=function(){
         window.sourceB.appendBuffer(f.result);

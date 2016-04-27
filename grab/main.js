@@ -71,7 +71,11 @@ startRecord.onclick=startRecording;
 function startRecording(){
     console.log('startRecording called');
     //var options={mimeType:'video/webm',bitsPerSecond:100000};
-    var options={mimeType:'video/webm'};
+    var options={
+        mimeType:'video/mp4',
+        audioBitsPerSecond : 128000,
+        videoBitsPerSecond : 128000
+    };
     recordedBlobs=[];
     try{
         console.log('trying to create mediaRecorder.');
@@ -81,16 +85,17 @@ function startRecording(){
 
     }
     mediaRecorder.ondataavailable=handleDataAvailable;
-    mediaRecorder.start(1);
+    mediaRecorder.start(50);
     console.log('mediaRecorder started. '+mediaRecorder);
+    console.log("with MIME: "+mediaRecorder.mimeType);
 }
 
 function handleDataAvailable(event){
     //console.log('handleDataAvailable called !');
     if(event.data&&event.data.size>0){
         recordedBlobs.push(event.data);
-        mediaSender.postMessage({type:'mediaStream',data:event.data});
-        //#console.log("Data chunk size: "+event.data.size);
+        //mediaSender.postMessage({type:'mediaStream',data:event.data});
+        console.log("Data chunk size: "+event.data.size);
     }
 }
 
